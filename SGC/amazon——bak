@@ -1,0 +1,166 @@
+amazon——bak
+
+dataset:amazon_new
+batch_size:20480
+output_batch:25
+train_seed:42
+pre_seed:10
+no_cuda:False
+n_jobs:46
+lr:0.001
+weight_decay:0.0
+if_output:True
+patience:30
+name:big
+recompute:False
+samp_pare_num:10
+samp_times:1
+samp_num:300
+un_layer:2
+max_degree:256
+max_samp_nei:256
+if_sampling:False
+if_normalized:False
+if_sort:False
+if_self_loop:False
+weight:same
+emb_size:512
+if_trans_bn:True
+if_mlp_bn:False
+trans_act:leaky
+mlp_size:512
+mlp_layer:6
+if_double:False
+if_xavier:True
+if_bias:False
+drop_rate:0.1
+run_times:3
+balanced_weight:False
+cuda:True
+device:cuda:0
+if_multi:True
+if_multi_label:True
+tensor([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+       device='cuda:0')
+Unfolder Set Seed:  10
+Init in 26.56 s
+------------------------------------------------------------
+EMB File Name:pre/amazon_new-naive-la2-weightsame-degree256.pklbak
+Load Previous Node Features
+Shape of Tensor torch.Size([1255968, 3, 200])
+IF_MULTI_label True
+Set Seed:  42
+GUN(
+  (drop_out): Dropout(p=0.1, inplace=False)
+  (bn): BatchNorm1d(200, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (trans_lin): ModuleList(
+    (0): Linear(in_features=200, out_features=512, bias=False)
+  )
+  (trans_act): LeakyReLU(negative_slope=0.01)
+  (trans_bn): BatchNorm1d(1536, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (mlp): Sequential(
+    (0): Linear(in_features=1536, out_features=512, bias=True)
+    (1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Dropout(p=0.1, inplace=False)
+    (4): Linear(in_features=512, out_features=512, bias=True)
+    (5): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+    (7): Dropout(p=0.1, inplace=False)
+    (8): Linear(in_features=512, out_features=512, bias=True)
+    (9): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (10): ReLU()
+    (11): Dropout(p=0.1, inplace=False)
+    (12): Linear(in_features=512, out_features=512, bias=True)
+    (13): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (14): ReLU()
+    (15): Dropout(p=0.1, inplace=False)
+    (16): Linear(in_features=512, out_features=512, bias=True)
+    (17): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (18): ReLU()
+    (19): Dropout(p=0.1, inplace=False)
+    (20): Linear(in_features=512, out_features=107, bias=True)
+  )
+)
+/home/chen/anaconda3/lib/python3.7/site-packages/torch/nn/functional.py:1351: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn("nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.")
+/home/chen/anaconda3/lib/python3.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Batch 26(0/30)s, loss:0.07| Tr:0.0356| Va:0.0882| BestVa:0.0000 Ts:0.0000
+-------------------- TS:0.0870 in 9.52s --------------------
+Batch 51(0/30)s, loss:0.07| Tr:0.0052| Va:0.0114| BestVa:0.0882 Ts:0.0870
+----- Train 0 epoch in 28.82[22.29](27.82) second -----
+Batch 76(1/30)s, loss:0.06| Tr:0.0476| Va:0.0593| BestVa:0.0882 Ts:0.0870
+Batch 101(2/30)s, loss:0.06| Tr:0.1026| Va:0.1094| BestVa:0.0882 Ts:0.0870
+-------------------- TS:0.1080 in 35.82s --------------------
+----- Train 1 epoch in 56.69[44.06](26.87) second -----
+Batch 126(0/30)s, loss:0.06| Tr:0.1347| Va:0.1502| BestVa:0.1094 Ts:0.1080
+-------------------- TS:0.1480 in 44.41s --------------------
+Batch 151(0/30)s, loss:0.06| Tr:0.1724| Va:0.1862| BestVa:0.1502 Ts:0.1480
+-------------------- TS:0.1846 in 53.15s --------------------
+Batch 176(0/30)s, loss:0.06| Tr:0.2357| Va:0.2155| BestVa:0.1862 Ts:0.1846
+-------------------- TS:0.2139 in 61.87s --------------------
+----- Train 2 epoch in 91.31[65.55](33.65) second -----
+Batch 201(0/30)s, loss:0.05| Tr:0.2675| Va:0.2778| BestVa:0.2155 Ts:0.2139
+-------------------- TS:0.2766 in 70.51s --------------------
+Batch 226(0/30)s, loss:0.05| Tr:0.2965| Va:0.2997| BestVa:0.2778 Ts:0.2766
+-------------------- TS:0.2993 in 79.31s --------------------
+----- Train 3 epoch in 122.42[87.19](30.14) second -----
+Batch 251(0/30)s, loss:0.05| Tr:0.3227| Va:0.3450| BestVa:0.2997 Ts:0.2993
+-------------------- TS:0.3466 in 87.90s --------------------
+Batch 276(0/30)s, loss:0.05| Tr:0.3874| Va:0.4089| BestVa:0.3450 Ts:0.3466
+-------------------- TS:0.4097 in 96.63s --------------------
+Batch 301(0/30)s, loss:0.05| Tr:0.4132| Va:0.4332| BestVa:0.4089 Ts:0.4097
+-------------------- TS:0.4333 in 105.59s --------------------
+----- Train 4 epoch in 158.16[108.96](34.76) second -----
+Batch 326(0/30)s, loss:0.04| Tr:0.4444| Va:0.4688| BestVa:0.4332 Ts:0.4333
+-------------------- TS:0.4688 in 114.31s --------------------
+Batch 351(0/30)s, loss:0.04| Tr:0.4726| Va:0.5020| BestVa:0.4688 Ts:0.4688
+-------------------- TS:0.5009 in 123.24s --------------------
+----- Train 5 epoch in 189.92[130.88](30.75) second -----
+Batch 376(0/30)s, loss:0.04| Tr:0.4972| Va:0.5242| BestVa:0.5020 Ts:0.5009
+-------------------- TS:0.5216 in 131.98s --------------------
+Batch 401(0/30)s, loss:0.04| Tr:0.5127| Va:0.5443| BestVa:0.5242 Ts:0.5216
+-------------------- TS:0.5427 in 140.79s --------------------
+Batch 426(0/30)s, loss:0.04| Tr:0.5159| Va:0.5555| BestVa:0.5443 Ts:0.5427
+-------------------- TS:0.5534 in 149.61s --------------------
+----- Train 6 epoch in 225.37[152.62](34.46) second -----
+Batch 451(0/30)s, loss:0.04| Tr:0.5390| Va:0.5823| BestVa:0.5555 Ts:0.5534
+-------------------- TS:0.5802 in 158.29s --------------------
+Batch 476(0/30)s, loss:0.04| Tr:0.5350| Va:0.6056| BestVa:0.5823 Ts:0.5802
+-------------------- TS:0.6040 in 167.32s --------------------
+----- Train 7 epoch in 256.78[174.63](30.40) second -----
+Batch 501(0/30)s, loss:0.04| Tr:0.5303| Va:0.5914| BestVa:0.6056 Ts:0.6040
+Batch 526(1/30)s, loss:0.04| Tr:0.5668| Va:0.6023| BestVa:0.6056 Ts:0.6040
+Batch 551(2/30)s, loss:0.03| Tr:0.5675| Va:0.6066| BestVa:0.6056 Ts:0.6040
+-------------------- TS:0.6047 in 193.79s --------------------
+----- Train 8 epoch in 285.79[196.45](28.04) second -----
+Batch 576(0/30)s, loss:0.04| Tr:0.5612| Va:0.6056| BestVa:0.6066 Ts:0.6047
+Batch 601(1/30)s, loss:0.03| Tr:0.5674| Va:0.6061| BestVa:0.6066 Ts:0.6047
+----- Train 9 epoch in 310.72[218.34](23.92) second -----
+Batch 626(2/30)s, loss:0.04| Tr:0.5583| Va:0.6215| BestVa:0.6066 Ts:0.6047
+-------------------- TS:0.6196 in 220.15s --------------------
+Batch 651(0/30)s, loss:0.03| Tr:0.5792| Va:0.6244| BestVa:0.6215 Ts:0.6196
+-------------------- TS:0.6237 in 229.06s --------------------
+Batch 676(0/30)s, loss:0.03| Tr:0.5735| Va:0.6223| BestVa:0.6244 Ts:0.6237
+----- Train 10 epoch in 343.01[240.27](31.31) second -----
+Batch 701(1/30)s, loss:0.03| Tr:0.5768| Va:0.6319| BestVa:0.6244 Ts:0.6237
+-------------------- TS:0.6311 in 246.66s --------------------
+Batch 726(0/30)s, loss:0.03| Tr:0.5921| Va:0.6343| BestVa:0.6319 Ts:0.6311
+-------------------- TS:0.6333 in 255.59s --------------------
+----- Train 11 epoch in 374.84[262.15](30.85) second -----
+Batch 751(0/30)s, loss:0.03| Tr:0.6018| Va:0.6371| BestVa:0.6343 Ts:0.6333
+-------------------- TS:0.6374 in 264.34s --------------------
+Batch 776(0/30)s, loss:0.03| Tr:0.5966| Va:0.6367| BestVa:0.6371 Ts:0.6374
+Batch 801(1/30)s, loss:0.03| Tr:0.5942| Va:0.6455| BestVa:0.6371 Ts:0.6374
+-------------------- TS:0.6455 in 282.31s --------------------
+----- Train 12 epoch in 407.75[284.23](31.91) second -----
+Batch 826(0/30)s, loss:0.03| Tr:0.6024| Va:0.6415| BestVa:0.6455 Ts:0.6455
+Batch 851(1/30)s, loss:0.03| Tr:0.6102| Va:0.6420| BestVa:0.6455 Ts:0.6455
+----- Train 13 epoch in 432.86[306.12](24.13) second -----
+^AdBatch 876(2/30)s, loss:0.03| Tr:0.6074| Va:0.6438| BestVa:0.6455 Ts:0.6455
