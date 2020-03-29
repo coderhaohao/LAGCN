@@ -2,7 +2,7 @@
 
 ### Motivation
 
-![image-20200329143608311](/Users/chenhao/Library/Application Support/typora-user-images/image-20200329143608311.png)
+![framework](framework.png)
 
 ### Code details
 
