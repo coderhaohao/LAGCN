@@ -103,6 +103,7 @@ parser.add_argument('--no_add', action='store_true', default=False,
                     help='No adder.')
 parser.add_argument('--no_filter', action='store_true', default=False,
                     help='No filter.')
+parser.add_argument('--add_thre', type=int, default=-1, help='Maximum Number.')
 
 args = parser.parse_args()
 print('\n'.join([(str(_)+':'+str(vars(args)[_])) for _ in vars(args).keys()]))
@@ -116,10 +117,14 @@ torch.manual_seed(args.seed)
 method = args.method
 
 thre = 0.7
-if dataset in ['cora', 'citeseer']:
-    total_neigh = 6
-if dataset in ['pubmed']:
-    total_neigh = 30
+if args.add_thre<0:
+    if dataset in ['cora', 'citeseer']:
+        total_neigh = 6
+    if dataset in ['pubmed']:
+        total_neigh = 30
+else:
+    total_neigh = args.add_thre
+    print('Total Neigh is set as %d'%(total_neigh))
 if_add = not args.no_add
 if_filt = not args.no_filter
 adj, features, lb_dict, tr_set, va_set, ts_set = load_data(dataset)

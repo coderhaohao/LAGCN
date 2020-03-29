@@ -311,3 +311,116 @@ def gen_train_set(
     print('Extra Edge Compute in %.4f min' % ((time3 - time2) / 60))
 
     return tr_edges, va_edges, ts_edges
+
+
+def gen_train_reddit(
+        adj, lb_oh, tr_set=None,
+        va_set=None, ts_set=None,
+        balance_rate=0, extra_rate=0, samp_rate=0.001):
+
+    tr_set = set(tr_set)
+    va_set = set(va_set).union(tr_set)
+    ts_set = set(ts_set).union(va_set)
+    tr_edge_list = []
+    tr_edlb_list = []
+    va_edge_list = []
+    va_edlb_list = []
+    ts_edge_list = []
+    ts_edlb_list = []
+    time0 = time.time()
+    total_idx = np.hstack([
+        np.array(list(tr_set)),
+        np.array(list(va_set)),
+        np.array(list(ts_set))])
+    lbs = np.zeros((adj.shape[0], 1))-1
+    for _ in lb_oh:
+        lbs[_] = np.argmax(lb_oh[_])
+    tr_list = list(tr_set)
+    if samp_rate<1:
+        iter_num = np.sort(np.random.choice(total_idx, int(samp_rate*len(total_idx)), replace=False))
+    else:
+        iter_num = total_idx
+    for ind,a in enumerate(iter_num):
+        neigh_list = np.nonzero(adj[a, :])[1]
+        if ind % 10000 == 0:
+            print('%d nodes finished!!!' %ind)
+        for b in neigh_list:
+            if a in tr_set and b in tr_set:
+                tr_edge_list.append((a, b))
+                lb = 1 if np.dot(lb_oh[a], lb_oh[b]) > 0 else 0
+                tr_edlb_list.append(lb)
+                continue
+            if a in va_set and b in va_set:
+                va_edge_list.append((a, b))
+                lb = 1 if np.dot(lb_oh[a], lb_oh[b]) > 0 else 0
+                va_edlb_list.append(lb)
+                continue
+            if a in ts_set and b in ts_set:
+                ts_edge_list.append((a, b))
+                lb = 1 if np.dot(lb_oh[a], lb_oh[b]) > 0 else 0
+                ts_edlb_list.append(lb)
+                continue
+    time1 = time.time()
+
+    pos_num = np.sum(tr_edlb_list)
+    neg_num = len(tr_edlb_list) - pos_num
+    print('Raw pos edges:%d, neg edges:%d'%(pos_num, neg_num))
+    if balance_rate > 0:
+
+        while (len(tr_edlb_list) - pos_num) < int(pos_num*balance_rate):
+            diff_num = int(pos_num*balance_rate) - (len(tr_edlb_list) - pos_num)
+            print("Remaining %d unbalanced edges" %(diff_num))
+            a = np.random.choice(tr_list, 2000000)
+            b = np.random.choice(tr_list, 2000000)
+            ab = np.hstack([a.reshape([-1, 1]), b.reshape([-1, 1])])
+            ab_lb = ((lbs[a]>0)&(lbs[b]>0)&(lbs[a]!=lbs[b])).reshape([-1])
+            neg_lbs = np.hstack([ab[ab_lb], np.zeros((int(np.sum(ab_lb)), 1))]).astype(np.int)
+            neg_lbs = neg_lbs[:min(diff_num, neg_lbs.shape[0])]
+            tr_edge_list.extend([tuple(_) for _ in list(neg_lbs[:,:-1])])
+            tr_edlb_list.extend([0]*neg_lbs.shape[0])
+
+    time2 = time.time()
+
+    if extra_rate > 0:
+        tr_list = list(tr_set)
+        extra_num = int(0.5 * extra_rate * len(tr_edge_list))
+        pos_edge_list = []
+        pos_edlb_list = []
+        neg_edge_list = []
+        neg_edlb_list = []
+        while len(pos_edge_list) < extra_num or len(neg_edge_list) < extra_num:
+            if (len(pos_edge_list) + len(neg_edge_list)) %10000==0:
+                print('Extra filling... Pos:%d/%d, Neg:%d/%d'%(
+                    len(pos_edge_list),extra_num,len(neg_edge_list),extra_num
+                ))
+            a, b = np.random.choice(tr_list, 2)
+            lb = 1 if np.dot(lb_oh[a], lb_oh[b]) > 0 else 0
+            if lb > 0:
+                if len(pos_edge_list) < extra_num:
+                    pos_edge_list.append((a, b))
+                    pos_edlb_list.append(lb)
+                continue
+            else:
+                if len(neg_edge_list) < extra_num:
+                    neg_edge_list.append((a, b))
+                    neg_edlb_list.append(lb)
+                continue
+        tr_edge_list.extend(pos_edge_list)
+        tr_edge_list.extend(neg_edge_list)
+        tr_edlb_list.extend(pos_edlb_list)
+        tr_edlb_list.extend(neg_edlb_list)
+    tr_edlb_list = np.array(tr_edlb_list)
+    va_edlb_list = np.array(va_edlb_list)
+    ts_edlb_list = np.array(ts_edlb_list)
+    tr_edges = [(tr_edge_list[_][0], tr_edge_list[_][1], tr_edlb_list[_]) for _ in range(len(tr_edge_list))]
+    va_edges = [(va_edge_list[_][0], va_edge_list[_][1], va_edlb_list[_]) for _ in range(len(va_edge_list))]
+    ts_edges = [(ts_edge_list[_][0], ts_edge_list[_][1], ts_edlb_list[_]) for _ in range(len(ts_edge_list))]
+
+    tr_edges = np.array(tr_edges)
+    va_edges = np.array(va_edges)
+    ts_edges = np.array(ts_edges)
+    time3 = time.time()
+    print(tr_edges.shape)
+    print(va_edges.shape)
+    print(ts_edges.shape)
+    return tr_edges, va_edges, ts_edges
